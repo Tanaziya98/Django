@@ -12,12 +12,7 @@ def handleblog(request):
     if  not request.user.is_authenticated:
         messages.error(request,"Please Login  & Try Again")
         return redirect('/login')
-        messages.info(request,"Welcome To My Website")
-        return redirect('/')
-    else:
-        messages.warning(request,"Invalid Credentials")
-        return redirect('/login')
-
+        
     return render(request,'handleblog.html')    
 
 def services(request):
@@ -38,7 +33,7 @@ def signup(request):
         pass1=request.POST.get('pass1')
         pass2=request.POST.get('pass2')
         if pass1!=pass2:
-            return HttpResponse("Password not matched")
+            messages.warning(request,"password not matched")
 
         try:
             if User.objects.get(username=username):
@@ -65,9 +60,12 @@ def handlelogin(request):
         handlepassword=request.POST.get('pass1')
         user=authenticate(username=handleusername,password=handlepassword)
         if user is not None:
+            login(request,user)
+            messages.info(request,"Welcome To My Website")
             return redirect('/')
         else:
-            return HttpResponse("Invalid Credentials")  
+            messages.warning(request,"Invalid Credentials")  
+            return redirect('/login')
     return render(request,'auth/login.html')
 
 
