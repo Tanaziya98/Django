@@ -39,7 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',   
     'app',
+
+    'allauth',   
+    'allauth.account',  
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google', 
 ]
 
 MIDDLEWARE = [
@@ -82,6 +88,37 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+AUTHENTICATION_BACKENDS = (
+ 'django.contrib.auth.backends.ModelBackend',
+ 'allauth.account.auth_backends.AuthenticationBackend',
+ )
+
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_HOST_USER='tanaziyamb02@gmail.com'
+EMAIL_HOST_PASSWORD='0210Tanziya'
+EMAIL_PORT=587
+EMAIL_USER_TLS=True
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+#enable the less secure app(email that you have given in backend ie in settings.py)
+#https://myaccount.google.com/u/2/lesssecureapps?pli=1
+
+
 
 
 # Password validation

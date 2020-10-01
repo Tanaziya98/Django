@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
 from django.conf import settings
 from django.contrib import messages
+from .models import Contact
+from django.core import mail
+from django.core.mail.message import EmailMessage
 
 # Create your views here.
 def index(request):
@@ -22,6 +25,24 @@ def about(request):
     return render(request,'about.html')    
 
 def contact(request):
+    if request.method=="POST":
+        fullname=request.POST.get('fullname')
+        email=request.POST.get('email')
+        phone=request.POST.get('num')
+        description=request.POST.get('desc')
+        contact_query=Contact(name=fullname,email=email,number=phone,description=description)#left hand attribute should be same as given in models.py i.e the table
+        contact_query.save()
+        #email starts here
+        from_email=settings.EMAIL_HOST_USER
+        connection=mail.get_connection()
+        connection.open()
+        email_message=email.EmailMessage(fullname,description,from_mail,['tanaziyamb@gmail.com'],connection=connection)
+        connection.send_messages(email_message)
+        connection.close()
+        messages.info(request,"Thanks for Contacting Us")
+        return redirect('/contact')
+    
+
     return render(request,'contact.html')    
 
 def signup(request):
