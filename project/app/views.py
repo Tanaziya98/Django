@@ -1,9 +1,9 @@
 from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-from django.conf import settings
 from django.contrib import messages
 from .models import Contact
+from django.conf import settings
 from django.core import mail
 from django.core.mail.message import EmailMessage
 
@@ -34,10 +34,13 @@ def contact(request):
         contact_query.save()
         #email starts here
         from_email=settings.EMAIL_HOST_USER
+        # email starts here
+        # your mail starts here
         connection=mail.get_connection()
         connection.open()
-        email_mesge=mail.EmailMessage(f'Website Email from {fullname}',f'Email from :{email}\n User Query:{description}\nPhone No:{phone}',from_email,['tanaziyamb02@gmail.com'],connection=connection)
-        connection.send_messages([email_mesge])
+        email_mesge=mail.EmailMessage(f'Website Email from {fullname}',f'Email from : {email}\nUser Query :{description}\nPhone No : {phone}',from_email,['karnachandan27@gmail.com','aneesurehman423@gmail.com'],cc=['adityaprasad010203@gmail.com','swatinaik20012@gmail.com'],connection=connection)
+        email_user=mail.EmailMessage('AIROBOTICA',f'Hello {fullname}\nThanks fo Contacting Us Will Resolve Your Query Asap\nThank You',from_email,[email],connection=connection)
+        connection.send_messages([email_mesge,email_user])
         connection.close()
         messages.info(request,"Thanks for Contacting Us")
         return redirect('/contact')
