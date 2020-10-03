@@ -110,8 +110,8 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 EMAIL_HOST='smtp.gmail.com'
-EMAIL_HOST_USER='tanaziyamb02@gmail.com'
-EMAIL_HOST_PASSWORD='0210Tanziya'
+EMAIL_HOST_USER='tanaziyamb@gmail.com'
+EMAIL_HOST_PASSWORD=''
 EMAIL_PORT=587
 EMAIL_USER_TLS=True
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'

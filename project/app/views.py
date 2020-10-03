@@ -36,8 +36,8 @@ def contact(request):
         from_email=settings.EMAIL_HOST_USER
         connection=mail.get_connection()
         connection.open()
-        email_message=email.EmailMessage(fullname,description,from_mail,['tanaziyamb@gmail.com'],connection=connection)
-        connection.send_messages(email_message)
+        email_mesge=mail.EmailMessage(f'Website Email from {fullname}',f'Email from :{email}\n User Query:{description}\nPhone No:{phone}',from_email,['tanaziyamb02@gmail.com'],connection=connection)
+        connection.send_messages([email_mesge])
         connection.close()
         messages.info(request,"Thanks for Contacting Us")
         return redirect('/contact')
