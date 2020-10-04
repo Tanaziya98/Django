@@ -7,6 +7,7 @@ from .models import Contact
 from django.core import mail
 from django.core.mail.message import EmailMessage
 
+
 # Create your views here.
 def index(request):
     return render(request,'index.html')
@@ -36,8 +37,9 @@ def contact(request):
         from_email=settings.EMAIL_HOST_USER
         connection=mail.get_connection()
         connection.open()
-        email_mesge=mail.EmailMessage(f'Website Email from {fullname}',f'Email from :{email}\n User Query:{description}\nPhone No:{phone}',from_email,['tanaziyamb02@gmail.com'],connection=connection)
-        connection.send_messages([email_mesge])
+        email_mesge=mail.EmailMessage(f'Website Email from {fullname}',f'Email from : {email}\nUser Query :{description}\nPhone No : {phone}',from_email,['tanaziyamb@gmail.com'],connection=connection)
+        email_user=mail.EmailMessage('AIROBOTICA',f'Hello{fullname}\n Thanks for Contacting Us We will Resolve Your Problem Soon\n Thank you\n',from_email,[email],connection=connection)
+        connection.send_messages([email_mesge,email_user])
         connection.close()
         messages.info(request,"Thanks for Contacting Us")
         return redirect('/contact')
