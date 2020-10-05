@@ -1,9 +1,9 @@
 from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate,login,logout
-from django.conf import settings
 from django.contrib import messages
-from .models import Contact
+from .models import Contact,BlogPosts
+from django.conf import settings
 from django.core import mail
 from django.core.mail.message import EmailMessage
 
@@ -16,8 +16,9 @@ def handleblog(request):
     if  not request.user.is_authenticated:
         messages.error(request,"Please Login  & Try Again")
         return redirect('/login')
-        
-    return render(request,'handleblog.html')    
+    posts=BlogPosts.objects.all()
+    context={'posts': posts}   
+    return render(request,'handleblog.html',context)    
 
 def services(request):
     return render(request,'services.html')    
@@ -35,8 +36,9 @@ def contact(request):
         contact_query.save()
         #email starts here
         from_email=settings.EMAIL_HOST_USER
+        # email starts here
+        # your mail starts here
         connection=mail.get_connection()
-        connection.open()
         email_mesge=mail.EmailMessage(f'Website Email from {fullname}',f'Email from : {email}\nUser Query :{description}\nPhone No : {phone}',from_email,['tanaziyamb@gmail.com'],connection=connection)
         email_user=mail.EmailMessage('AIROBOTICA',f'Hello{fullname}\n Thanks for Contacting Us We will Resolve Your Problem Soon\n Thank you\n',from_email,[email],connection=connection)
         connection.send_messages([email_mesge,email_user])
@@ -96,3 +98,16 @@ def handlelogout(request):
     logout(request)
     messages.success(request,"Logout Success")
     return redirect('/login')
+
+def addpost(request):
+    if request.method=="POST":
+        title=request.POST.get('title')
+        content=request.POST.get('desc')
+        name=request.POST.get('name')
+        files=request.FILES['file']
+        query=BlogPosts(title=title,content=content,author=name,img=files)
+        query.save()
+        messages.info(request,"Your Post Has Been Added")
+        return redirect('/handleblog')
+    
+    return render(request,'addpost.html')    
