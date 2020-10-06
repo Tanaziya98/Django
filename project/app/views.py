@@ -111,3 +111,18 @@ def addpost(request):
         return redirect('/handleblog')
     
     return render(request,'addpost.html')    
+
+def search(request):
+    query=request.GET['search']
+    if len(query)>75:
+        allPosts=BlogPosts.objects.none()
+    else:
+        allPostsTitle=BlogPosts.objects.filter(title__icontains=query)
+        allPostsContent=BlogPosts.objects.filter(content__icontains=query)
+        allPosts=allPostsTitle.union(allPostsContent)   
+    if allPosts.count()==0:#if no query matchs
+        messages.warning(request,"No Search Results")
+
+    params={'allPosts':allPosts,'query':query}         
+    
+    return render(request,'search.html',params)    
